@@ -1,16 +1,17 @@
-const header = document.getElementById('main-header');
-const additem = document.getElementById('add-item');
+const ul = document.querySelector("#items");
 
-header.style.border = "2px solid black";
-additem.style.fontWeight = "bolder"
-additem.style.color = "green"
+const li = document.createElement("li");
+li.textContent = 'Item 5';
+ul.appendChild(li)
 
-const listItem = document.getElementsByClassName("list-group-item");
 
-listItem[2].style.backgroundColor = "green";
+const items = document.getElementsByClassName("list-group-item");
 
-for(let list of listItem) {
-  list.style.fontWeight = "bolder"
+for(let item of items) {
+  item.style.backgroundColor = "#f5f9f7";
 }
 
-
+const items2 = document.getElementsByTagName("li");
+for(let item of items2) {
+  item.style.fontWeight = "bolder";
+}
