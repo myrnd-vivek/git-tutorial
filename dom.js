@@ -15,3 +15,8 @@ const items2 = document.getElementsByTagName("li");
 for(let item of items2) {
   item.style.fontWeight = "bolder";
 }
+
+const secondEl = document.querySelector(".list-group-item:nth-child(2)");
+const thirdEl = document.querySelector(".list-group-item:nth-child(3)");
+secondEl.style.backgroundColor = 'green';
+thirdEl.style.display = 'none';
