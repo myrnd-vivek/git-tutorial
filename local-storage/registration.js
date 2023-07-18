@@ -4,8 +4,8 @@ function clickHandler(event) {
 	form.name = document.getElementById("name").value;
 	form.email = document.getElementById("email").value;
 	form.phone = document.getElementById("phone").value;
-	form.date = document.getElementById("date").value;
-	form.time = document.getElementById("time").value;
+	// form.date = document.getElementById("date").value;
+	// form.time = document.getElementById("time").value;
 
 	addToLocalStorage(form);
 	renderList();
@@ -30,6 +30,25 @@ function deleteUser(email) {
 	renderList();
 }
 
+function editUser(userEmail) {
+	const data = JSON.parse(localStorage.getItem("users"));
+  let user = {};
+  data.forEach((item) => {
+    if(item.email == userEmail) {
+      user = item;
+    }
+  })
+	deleteUser(userEmail);
+
+  const name = document.getElementById('name');
+  const email = document.getElementById('email');
+  const phone = document.getElementById('phone');
+
+  name.value = user.name;
+  email.value = user.email;
+  phone.value = user.phone;
+}
+
 function renderList() {
 	const data = JSON.parse(localStorage.getItem("users"));
 	if (data) {
@@ -40,8 +59,12 @@ function renderList() {
 			li.style.display = "flex";
 			li.style.padding = "2px";
 			li.style.margin = "2px";
-			li.innerHTML = `<span>Name: ${user.name}</span> <span>Email: ${user.email} </span> <span>Phone: ${user.phone}</span>
-      <button onclick="deleteUser('${user.email}')">Delete</button>`;
+			li.innerHTML = `
+        <span>Name: ${user.name}</span> 
+        <span>Email: ${user.email}</span> 
+        <span>Phone: ${user.phone}</span>
+        <button onclick="editUser('${user.email}')">Edit</button>
+        <button onclick="deleteUser('${user.email}')">Delete</button>`;
 			ul.appendChild(li);
 		});
 	}
