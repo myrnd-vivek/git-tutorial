@@ -1,76 +1,28 @@
-/*===== Traversing the DOM =====*/
-
+const form = document.querySelector("#addForm");
 const itemList = document.querySelector("#items");
 
-// Parent Node
+form.addEventListener("submit", (e) => {
+	e.preventDefault();
+	const value = document.getElementById("item").value;
+	
+  const li = document.createElement("li");
+	li.className = "list-group-item";
+	li.appendChild(document.createTextNode(value));
 
-// console.log(itemList.parentNode);
-// itemList.parentNode.style.backgroundColor = "#f5f7f9"
-
-// console.log(itemList.parentElement);
-// itemList.parentElement.style.backgroundColor = "#f5f7f9"
-
-// Child Node 
-
-// console.log(itemList.childNodes)
-// console.log(itemList.children)
-// console.log(itemList.children[1])
-// itemList.children[2].style.backgroundColor = 'yellow'
-
-// First Child 
-
-// console.log(itemList.firstChild)
-// console.log(itemList.firstElementChild)
-// itemList.firstElementChild.textContent = "hello world"
-
-// Last Child
-
-// console.log(itemList.lastChild)
-// console.log(itemList.lastElementChild)
-// itemList.lastElementChild.style.color = 'green'
- 
-// Next Sibling
-
-// console.log(itemList.nextSibling)
-// console.log(itemList.nextElementSibling)
-
-// Previous Sibling
-
-// console.log(itemList.previousSibling)
-// console.log(itemList.previousElementSibling)
+	const button = document.createElement("button");
+	button.className = "btn btn-danger btn-sm float-right delete";
+  button.appendChild(document.createTextNode('X'))
+	li.appendChild(button);
+  
+	itemList.appendChild(li);
+});
 
 
-// Create Element
-
-const newDiv = document.createElement("div");
-
-// Adding Class
-
-newDiv.className = "hello";
-
-// Adding id
-
-newDiv.id = "hello1";
-
-// Adding attribute
-
-newDiv.setAttribute('titel','hello div');
-
-// Create text node
-
-const newDivText = document.createTextNode("hello world");
-
-// Add text to div
-newDiv.appendChild(newDivText)
-
-
-const container = document.querySelector("header .container");
-const h1 = document.querySelector("header h1")
-
-container.insertBefore(newDiv,h1)
-console.log(newDiv)
-
-const li = document.createElement("li")
-const items = document.querySelector("#items");
-const item = document.querySelector(".list-group-item:nth-child(1)")
-items.insertBefore(newDiv,item)
+itemList.addEventListener("click",(e) => {
+  if(e.target.classList.contains('delete')) {
+    if(confirm('Are you sure ?')) {
+      const li = e.target.parentElement;
+      itemList.removeChild(li);
+    }
+  }
+})
