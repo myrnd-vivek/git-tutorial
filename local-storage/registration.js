@@ -7,8 +7,14 @@ function clickHandler(event) {
 	// form.date = document.getElementById("date").value;
 	// form.time = document.getElementById("time").value;
 
-	addToLocalStorage(form);
-	renderList();
+	//addToLocalStorage(form);
+	axios.post("https://crudcrud.com/api/90d906df5b1640e5bb6a61ae0a73c803/appointment",form)
+		.then(res => {
+			console.log(res)
+			renderList();
+			reset()
+		})
+		.catch(err => console.log(err));
 }
 
 function addToLocalStorage(form) {
@@ -21,53 +27,86 @@ function addToLocalStorage(form) {
 	}
 }
 
-function deleteUser(email) {
-	const data = JSON.parse(localStorage.getItem("users"));
-	const newData = data.filter((user) => {
-		return user.email != email;
-	});
-	localStorage.setItem("users", JSON.stringify(newData));
-	renderList();
+function deleteUser(_id) {
+	// const data = JSON.parse(localStorage.getItem("users"));
+	// const newData = data.filter((user) => {
+	// 	return user.email != email;
+	// });
+	// localStorage.setItem("users", JSON.stringify(newData));
+	const val = confirm('Are you sure ?');
+	if(val) {
+		axios.delete(`https://crudcrud.com/api/90d906df5b1640e5bb6a61ae0a73c803/appointment/${_id}`)
+			.then((res) => {
+				console.log(res);
+				renderList();
+			})
+			.catch((err) => console.log(err))
+	}
 }
 
-function editUser(userEmail) {
-	const data = JSON.parse(localStorage.getItem("users"));
-  let user = {};
-  data.forEach((item) => {
-    if(item.email == userEmail) {
-      user = item;
-    }
-  })
-	deleteUser(userEmail);
+function editUser(_id) {
+	// const data = JSON.parse(localStorage.getItem("users"));
+  // let user = {};
+  // data.forEach((item) => {
+  //   if(item.email == userEmail) {
+  //     user = item;
+  //   }
+  // })
+	// deleteUser(userEmail);
 
-  const name = document.getElementById('name');
-  const email = document.getElementById('email');
-  const phone = document.getElementById('phone');
+	axios.get(`https://crudcrud.com/api/90d906df5b1640e5bb6a61ae0a73c803/appointment/${_id}`)
+		.then(res => {
+			const user = res.data;
+			const name = document.getElementById('name');
+			const email = document.getElementById('email');
+			const phone = document.getElementById('phone');
+		
+			name.value = user.name;
+			email.value = user.email;
+			phone.value = user.phone;
 
-  name.value = user.name;
-  email.value = user.email;
-  phone.value = user.phone;
+			axios.delete(`https://crudcrud.com/api/90d906df5b1640e5bb6a61ae0a73c803/appointment/${_id}`)
+			.then((res) => {
+				console.log(res);
+				renderList();
+			})
+			.catch((err) => console.log(err))
+		})
+		
 }
 
 function renderList() {
-	const data = JSON.parse(localStorage.getItem("users"));
-	if (data) {
-		const ul = document.getElementById("output-items");
-		ul.innerHTML = "";
-		data.forEach((user) => {
-			const li = document.createElement("li");
-			li.style.display = "flex";
-			li.style.padding = "2px";
-			li.style.margin = "2px";
-			li.innerHTML = `
-        <span>Name: ${user.name}</span> 
-        <span>Email: ${user.email}</span> 
-        <span>Phone: ${user.phone}</span>
-        <button onclick="editUser('${user.email}')">Edit</button>
-        <button onclick="deleteUser('${user.email}')">Delete</button>`;
-			ul.appendChild(li);
-		});
-	}
+	// const data = JSON.parse(localStorage.getItem("users"));
+		axios.get("https://crudcrud.com/api/90d906df5b1640e5bb6a61ae0a73c803/appointment")
+			.then((res) => {
+				const data = res.data;
+				console.log(data);
+				if (data) {
+					const tbody = document.getElementById("items");
+					tbody.innerHTML = "";
+					data.forEach((user,index) => {
+						const tr = document.createElement("tr");
+						tr.innerHTML = `
+							<th scope="row">${index + 1}</th>
+							<th scope="row">${user.name}</th>
+							<td>${user.email}</td>
+							<td>${user.phone}</td>
+							<td> 
+								<button onclick="editUser('${user._id}')"><i class="bi bi-pencil-square edit"></i></button>
+								<button onclick="deleteUser('${user._id}')"><i class="bi bi-trash3 delete"></i></button>
+							</td>
+						`;
+						tbody.appendChild(tr);
+					});
+				}
+			})
+
+}
+
+function reset() {
+	document.getElementById('name').value = '';
+  document.getElementById('email').value = '';
+	document.getElementById('phone').value = '';
 }
 
 renderList();
