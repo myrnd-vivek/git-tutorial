@@ -109,4 +109,8 @@ function reset() {
 	document.getElementById('phone').value = '';
 }
 
-renderList();
+
+document.addEventListener("DOMContentLoaded",() => {
+	renderList();
+})
+
